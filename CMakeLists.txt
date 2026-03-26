@@ -3,4 +3,5 @@ project(matching_engine)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(matching_engine main.cpp)
+add_executable(matching_engine main.cpp
+        types.h)
