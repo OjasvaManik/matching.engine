@@ -4,4 +4,10 @@ project(matching_engine)
 set(CMAKE_CXX_STANDARD 26)
 
 add_executable(matching_engine main.cpp
-        types.h)
+        Types.h
+        LevelInfo.h
+        Order.h
+        OrderModify.h
+        Trade.h
+        OrderBook.cpp
+        OrderBook.h)
