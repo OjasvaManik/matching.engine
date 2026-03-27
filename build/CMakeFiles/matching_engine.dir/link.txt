@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/matching_engine.dir/link.d CMakeFiles/matching_engine.dir/main.cpp.o CMakeFiles/matching_engine.dir/OrderBook.cpp.o -o matching_engine
