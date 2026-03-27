@@ -2,6 +2,10 @@
 #include <algorithm>
 #include <numeric>
 
+OrderBook::OrderBook() = default;
+
+OrderBook::~OrderBook() = default;
+
 Trades OrderBook::add_order(const OrderPointer &order) {
     if (_orders.contains(order->get_id())) {
         return {};
@@ -22,15 +26,26 @@ Trades OrderBook::add_order(const OrderPointer &order) {
         }
     }
 
+    // Orders::iterator iterator;
+    // if (order->get_side() == OrderSide::BUY) {
+    //     auto &orders = _bids[order->get_price()];
+    //     orders.emplace_back(order);
+    //     iterator = std::next(orders.begin(), orders.size() - 1);
+    // } else {
+    //     auto &orders = _asks[order->get_price()];
+    //     orders.emplace_back(order);
+    //     iterator = std::next(orders.begin(), orders.size() - 1);
+    // }
+
     Orders::iterator iterator;
     if (order->get_side() == OrderSide::BUY) {
         auto &orders = _bids[order->get_price()];
         orders.emplace_back(order);
-        iterator = std::next(orders.begin(), orders.size() - 1);
+        iterator = std::prev(orders.end());
     } else {
         auto &orders = _asks[order->get_price()];
         orders.emplace_back(order);
-        iterator = std::next(orders.begin(), orders.size() - 1);
+        iterator = std::prev(orders.end());
     }
     _orders.insert({order->get_id(), OrderEntry{order, iterator}});
     return match_orders();
