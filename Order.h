@@ -5,11 +5,17 @@
 #include <memory>
 #include <stdexcept>
 
+#include "Constants.h"
+
 class Order {
 public:
     Order(const OrderId id, const OrderSide side, const OrderType type, const Price price,
           const Quantity quantity) : _id(id), _side(side), _type(type), _price(price), _initial_quantity(quantity),
                                      _remaining_quantity(quantity) {
+    }
+
+    Order(const OrderId id, const OrderSide side, const Quantity quantity) : Order(
+        id, side, OrderType::Market, Constants::INVALID_PRICE, quantity) {
     }
 
     [[nodiscard]] OrderId get_id() const { return _id; }
@@ -30,6 +36,15 @@ public:
             throw std::logic_error(std::format("Order: {}, cannot be filled more than remaining quantity.", get_id()));
         }
         _remaining_quantity -= quantity;
+    }
+
+    void to_good_till_cancelled(Price price) {
+        if (get_type() != OrderType::Market) {
+            throw std::logic_error(std::format("Order ({}) cannot have its price adjusted, only market orders can.",
+                                               get_id()));
+        }
+        _price = price;
+        _type = OrderType::GoodTillCancelled;
     }
 
 private:

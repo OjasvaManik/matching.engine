@@ -10,6 +10,18 @@ Trades OrderBook::add_order(const OrderPointer &order) {
         return {};
     }
 
+    if (order->get_type() == OrderType::Market) {
+        if (order->get_side() == OrderSide::BUY && !_asks.empty()) {
+            const auto &[worst_ask, _] = *_asks.rbegin();
+            order->to_good_till_cancelled(worst_ask);
+        } else if (order->get_side() == OrderSide::SELL && !_bids.empty()) {
+            const auto &[worst_bid, _] = *_bids.rbegin();
+            order->to_good_till_cancelled(worst_bid);
+        } else {
+            return {};
+        }
+    }
+
     Orders::iterator iterator;
     if (order->get_side() == OrderSide::BUY) {
         auto &orders = _bids[order->get_price()];
